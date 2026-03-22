@@ -10,20 +10,12 @@ from utils.verifier import verify_news
 from utils.explain import explain_news
 from utils.preprocess import highlight_suspicious_words
 
-# ============================================================================
-# PAGE CONFIGURATION
-# ============================================================================
-
 st.set_page_config(
     page_title="🔍 Fake News Detection & Verification",
     page_icon="📰",
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
-# ============================================================================
-# PREMIUM CSS & STYLING
-# ============================================================================
 
 st.markdown("""
 <style>
@@ -203,9 +195,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ============================================================================
-# SIDEBAR CONFIGURATION
-# ============================================================================
 
 with st.sidebar:
     st.markdown("""
@@ -215,8 +204,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
     
     st.markdown("---")
-    
-    # Database Status
+
     db_status = is_database_connected()
     if db_status:
         st.success("✅ Database Connected")
@@ -231,7 +219,6 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
     
-    # Quick stats
     results = fetch_results()
     if results:
         total_analyses = sum([row[1] for row in results])
@@ -263,10 +250,6 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-# ============================================================================
-# MAIN HEADER
-# ============================================================================
-
 col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:
@@ -276,10 +259,6 @@ with col2:
     """, unsafe_allow_html=True)
 
 st.markdown("---")
-
-# ============================================================================
-# INPUT SECTION
-# ============================================================================
 
 col1, col2 = st.columns([2, 1])
 
@@ -310,10 +289,6 @@ with col2:
     </div>
     """, unsafe_allow_html=True)
 
-# ============================================================================
-# ANALYSIS BUTTON & RESULTS
-# ============================================================================
-
 col_button = st.columns([1, 4, 1])[1]
 
 with col_button:
@@ -325,7 +300,6 @@ with col_button:
 
 if analyze_button:
     
-    # Validation
     if news_text.strip() == "":
         st.warning("⚠️ Please enter news text to analyze", icon="⚠️")
         st.stop()
@@ -334,30 +308,25 @@ if analyze_button:
         st.warning("⚠️ Please enter at least 10 characters", icon="⚠️")
         st.stop()
     
-    # Loading placeholder
     progress_bar = st.progress(0)
     status_text = st.empty()
     
-    # Step 1: Prediction
     status_text.write("🤖 Running AI analysis...")
     progress_bar.progress(25)
     
     label, confidence = predict_news(news_text)
     
-    # Step 2: Save to Database
     progress_bar.progress(50)
     status_text.write("💾 Saving to database...")
     
     if db_status:
         save_result(news_text, label, confidence)
-    
-    # Step 3: Get Explanation
+
     progress_bar.progress(75)
     status_text.write("📖 Generating explanation...")
     
     reasons = explain_news(news_text)
-    
-    # Step 4: Verify Sources
+
     status_text.write("🔍 Verifying sources...")
     progress_bar.progress(90)
     
@@ -365,16 +334,13 @@ if analyze_button:
     
     progress_bar.progress(100)
     status_text.write("✅ Analysis complete!")
-    
-    # Clear loading status after 1 second
+
     import time
     time.sleep(0.5)
     progress_bar.empty()
     status_text.empty()
     
     st.markdown("---")
-    
-    # ====== RESULT DISPLAY ======
     
     col1, col2, col3 = st.columns(3)
     
@@ -408,7 +374,7 @@ if analyze_button:
             """, unsafe_allow_html=True)
     
     with col2:
-        # Credibility Score
+      
         score = int(confidence * 100)
         
         st.markdown("<h3>📊 Credibility Score</h3>", unsafe_allow_html=True)
@@ -434,7 +400,6 @@ if analyze_button:
         """, unsafe_allow_html=True)
     
     with col3:
-        # Word Stats
         word_count = len(news_text.split())
         char_count = len(news_text)
         
@@ -448,8 +413,6 @@ if analyze_button:
     
     st.markdown("---")
     
-    # ====== TABS SECTION ======
-    
     tab1, tab2, tab3, tab4 = st.tabs([
         "🧠 Explanation",
         "🔗 Sources",
@@ -457,7 +420,7 @@ if analyze_button:
         "📋 History"
     ])
     
-    # TAB 1: EXPLANATION
+
     with tab1:
         st.markdown("<h3>Why did we get this result?</h3>", unsafe_allow_html=True)
         
@@ -471,7 +434,6 @@ if analyze_button:
         else:
             st.info("No specific indicators detected in this text")
         
-        # Highlight suspicious words
         st.markdown("<h4>🔴 Suspicious Words Found:</h4>", unsafe_allow_html=True)
         suspicious_words = highlight_suspicious_words(news_text)
         
@@ -480,8 +442,7 @@ if analyze_button:
             st.markdown(suspicious_text, unsafe_allow_html=True)
         else:
             st.success("✅ No suspicious words detected")
-    
-    # TAB 2: SOURCES
+
     with tab2:
         st.markdown("<h3>Related News Sources</h3>", unsafe_allow_html=True)
         
@@ -576,9 +537,6 @@ if analyze_button:
         else:
             st.info("No history yet - analyze some news to get started!")
 
-# ============================================================================
-# FOOTER ANALYTICS SECTION
-# ============================================================================
 
 st.markdown("---")
 st.markdown("<h2>📊 Overall Analytics Dashboard</h2>", unsafe_allow_html=True)
@@ -648,10 +606,6 @@ try:
 
 except Exception as e:
     st.warning("📊 Unable to load analytics data")
-
-# ============================================================================
-# FOOTER
-# ============================================================================
 
 st.markdown("---")
 
