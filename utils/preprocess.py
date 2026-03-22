@@ -13,20 +13,15 @@ def clean_text(text):
     """
     if not text:
         return ""
-    
-    # Remove URLs
+   
     text = re.sub(r'http\S+|www\.\S+', '', text)
-    
-    # Remove email addresses
+  
     text = re.sub(r'\S+@\S+', '', text)
-    
-    # Remove HTML tags
+ 
     text = re.sub(r'<[^>]+>', '', text)
-    
-    # Remove extra whitespace
+
     text = re.sub(r'\s+', ' ', text)
-    
-    # Convert to lowercase
+  
     text = text.lower().strip()
     
     return text
@@ -42,22 +37,19 @@ def extract_keywords(text, max_keywords=10):
     Returns:
         list: List of keywords
     """
-    # Remove punctuation and common words
     stop_words = {
         'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
         'of', 'with', 'by', 'from', 'is', 'are', 'was', 'were', 'be', 'been',
         'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could',
         'should', 'can', 'could', 'that', 'this', 'these', 'those'
     }
-    
-    # Clean and tokenize
+
     text_clean = text.lower()
     text_clean = re.sub(f'[{re.escape(string.punctuation)}]', '', text_clean)
     
     words = text_clean.split()
     keywords = [w for w in words if w not in stop_words and len(w) > 2]
-    
-    # Return unique keywords
+ 
     return list(dict.fromkeys(keywords))[:max_keywords]
 
 def highlight_suspicious_words(text):
