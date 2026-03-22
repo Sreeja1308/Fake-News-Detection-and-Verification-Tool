@@ -1,7 +1,6 @@
 """
 Utilities module - NLP, analysis, and preprocessing utilities
 """
-
 from .predictor import predict_news
 from .verifier import verify_news
 from .explain import explain_news
