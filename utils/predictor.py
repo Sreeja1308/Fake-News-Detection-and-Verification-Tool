@@ -3,12 +3,11 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-# Load sentiment classifier model
 try:
     classifier = pipeline(
         "text-classification",
         model="distilbert-base-uncased-finetuned-sst-2-english",
-        device=0 if False else -1  # CPU usage
+        device=0 if False else -1  
     )
     model_loaded = True
 except Exception as e:
@@ -35,7 +34,6 @@ def predict_news(text):
         return "Unable to analyze", 0.0
     
     try:
-        # Truncate text to avoid model token limit
         text_truncated = text[:512]
         
         results = classifier(text_truncated)
@@ -43,13 +41,10 @@ def predict_news(text):
         
         label = result['label'].upper()
         score = round(result['score'], 3)
-        
-        # Map sentiment to fake/real
+   
         if label == "NEGATIVE":
-            # Negative sentiment indicates potential fake news
             return "Fake", score
         else:
-            # Positive/Neutral sentiment indicates real news
             return "Real", score
             
     except Exception as e:
