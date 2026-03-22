@@ -1,4 +1,4 @@
-# 🔍 Fake News Detection & Verification System
+# 🔍 Fake News Detection & Verification Tool
 
 A production-level AI-powered web application built with Streamlit for detecting fake news and verifying credibility using advanced NLP and sentiment analysis.
 
