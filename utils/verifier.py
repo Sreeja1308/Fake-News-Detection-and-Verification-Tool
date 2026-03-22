@@ -21,7 +21,6 @@ def verify_news(query):
         return "⚠️ News API key not configured", []
     
     try:
-        # Limit query length to avoid API errors
         search_query = query[:100] if query else "news"
         
         url = "https://newsapi.org/v2/everything"
@@ -35,8 +34,7 @@ def verify_news(query):
         
         response = requests.get(url, params=params, timeout=10)
         data = response.json()
-        
-        # Check API response status
+
         if data.get("status") != "ok":
             error_msg = data.get("message", "Unknown API error")
             return f"⚠️ API Error: {error_msg}", []
@@ -45,8 +43,7 @@ def verify_news(query):
         
         if len(articles) == 0:
             return "ℹ️ No related news sources found", []
-        
-        # Format articles for display
+     
         formatted_articles = []
         for article in articles[:5]:
             formatted_articles.append({
